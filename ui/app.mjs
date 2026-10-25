@@ -13,7 +13,7 @@ const discussions = new Map();
 function persist() {
   const { language, exam, current, attempts, bookmarks } = state;
   try { localStorage.setItem(STORAGE, JSON.stringify({ language, exam, current, attempts, bookmarks })); }
-  catch { if (storageAvailable) { $('.sidebar-bottom small').textContent = 'No se pudo guardar el progreso'; storageAvailable = false; } }
+  catch { if (storageAvailable) { $('.sidebar-bottom small').textContent = 'No se pudo guardar el progreso'; $('#storage-notice').hidden = false; storageAvailable = false; } }
 }
 const currentQuestion = () => state.questions.find(q => q.id === state.current[state.exam]);
 const questionKey = (q) => `${state.exam}:${q.id}`;
@@ -59,7 +59,7 @@ async function loadExam(id) {
   const version = ++state.loadVersion;
   state.exam = id;
   state.query = ''; $('#search').value = ''; state.filter = 'all';
-  $('#loading').hidden = false; $('#question-content').hidden = true; $('#empty-state').hidden = true;
+  $('#loading').hidden = false; $('#loading').textContent = 'Cargando preguntas…'; $('#load-retry').hidden = true; $('#source-link').hidden = true; $('#bookmark').hidden = true; $('#question-content').hidden = true; $('#empty-state').hidden = true;
   $('#question-card').setAttribute('aria-busy', 'true');
   $('#question-number').textContent = '';
   try {
@@ -69,7 +69,7 @@ async function loadExam(id) {
     if (version !== state.loadVersion) return;
     state.questions = data.questions;
     updateFilters();
-  } catch (error) { if (version === state.loadVersion) $('#loading').textContent = `${error.message} Recarga la página para intentarlo de nuevo.`; }
+  } catch (error) { if (version === state.loadVersion) { $('#loading').textContent = 'No se pudieron cargar las preguntas. Comprueba tu conexión y vuelve a intentarlo.'; $('#load-retry').hidden = false; $('#question-card').setAttribute('aria-busy', 'false'); } }
 }
 function render() {
   const exam = manifest.exams.find(e => e.id === state.exam);
@@ -86,8 +86,11 @@ function render() {
   $('#answered-count').textContent = practiced.length; $('#progress-denominator').textContent = `/ ${exam.count} practicadas`;
   $('#correct-count').textContent = correct; $('#review-count').textContent = practiced.length - correct;
   $('#mobile-progress').textContent = `${practiced.length} practicadas · ${correct} acertadas`;
-  $('#progress-fill').style.width = `${practiced.length / exam.count * 100}%`;
-  $('#encouragement').textContent = practiced.length ? `Ya has dado ${practiced.length} ${practiced.length === 1 ? 'paso' : 'pasos'}. Sigue a tu ritmo.` : 'No hace falta saberlo todo.\nSolo empezar por una.';
+  const percent = Math.round(practiced.length / exam.count * 100);
+  $('#progress-fill').style.width = `${percent}%`;
+  $('#study-progress').setAttribute('aria-valuenow', String(percent));
+  $('#study-progress').setAttribute('aria-valuetext', `${practiced.length} de ${exam.count} preguntas practicadas`);
+  $('#encouragement').textContent = practiced.length ? `Ya has dado ${practiced.length} ${practiced.length === 1 ? 'paso' : 'pasos'}. Sigue a tu ritmo.` : 'Comprueba una respuesta para empezar a registrar tu progreso.';
   $('#result-count').textContent = state.query || state.filter !== 'all' ? `${state.filtered.length} de ${exam.count} preguntas` : `${exam.count} preguntas para explorar`;
   const q = currentQuestion();
   const hasQuestion = q && state.filtered.some(item => item.id === q.id);
@@ -122,7 +125,7 @@ function renderQuestion(q) {
   $('#selection-hint').textContent = !q.choices.length ? 'La fuente no incluye opciones para esta pregunta.' : q.answers.length > 1 ? `Selecciona ${q.answers.length} respuestas.` : 'Selecciona una respuesta.';
   const choices = $('#choices'); choices.replaceChildren();
   q.choices.forEach((choice, index) => {
-    const button = element('button', 'choice'); button.type = 'button';
+    const button = element('button', 'choice'); button.type = 'button'; button.dataset.choice = choice.key;
     const selected = state.selected.includes(choice.key);
     const showAnswer = state.checked || state.revealed;
     button.classList.toggle('selected', selected); button.setAttribute('aria-pressed', String(selected));
@@ -137,6 +140,7 @@ function renderQuestion(q) {
       if (q.answers.length > 1) state.selected = selected ? state.selected.filter(key => key !== choice.key) : [...state.selected, choice.key];
       else state.selected = [choice.key];
       renderQuestion(q);
+      choices.querySelector(`[data-choice="${choice.key}"]`)?.focus({ preventScroll: true });
     });
     choices.append(button);
   });
@@ -234,7 +238,7 @@ function renderMap() {
     const button = element('button', 'question-cell', q.number);
     button.classList.toggle('current', q.id === state.current[state.exam]);
     button.classList.toggle('done', attempt(q)?.correct === true); button.classList.toggle('missed', attempt(q)?.correct === false); button.classList.toggle('saved', isBookmarked(q));
-    button.setAttribute('aria-label', `Pregunta ${q.number}${attempt(q) ? ', practicada' : ''}`);
+    button.setAttribute('aria-label', `Pregunta ${q.number}${attempt(q) ? (attempt(q).correct ? ', acertada' : ', para repasar') : ''}${isBookmarked(q) ? ', marcada' : ''}`);
     if (q.id === state.current[state.exam]) button.setAttribute('aria-current', 'true');
     button.addEventListener('click', () => navigateTo(q)); grid.append(button);
   });
@@ -244,10 +248,11 @@ function navigateTo(q) {
   state.current[state.exam] = q.id; resetAnswer();
   state.mapPage = Math.floor(state.filtered.findIndex(item => item.id === q.id) / 30);
   persist(); render();
+  $('#question-card').focus({ preventScroll: true });
   if (compactStudy.matches) { $('#progress-dialog').close(); $('#question-card').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'start' }); }
 }
 function move(delta) { const index = state.filtered.findIndex(q => q.id === state.current[state.exam]); navigateTo(state.filtered[index + delta]); }
-function showLibrary() { $('#exam-search').value = ''; renderLibrary(); $('#library-dialog').showModal(); $('#exam-search').focus(); }
+function showLibrary() { if (!manifest) return; $('#exam-search').value = ''; renderLibrary(); $('#library-dialog').showModal(); if (matchMedia('(pointer: fine)').matches) $('#exam-search').focus(); }
 function renderLibrary() {
   const query = normalize($('#exam-search').value);
   const list = $('#exam-list'); list.replaceChildren();
@@ -277,6 +282,7 @@ for (const dialog of [$('#progress-dialog'), $('#library-dialog')]) {
     if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close();
   });
 }
+document.querySelectorAll('[data-library-trigger]').forEach(button => button.addEventListener('click', showLibrary));
 $('#library-button').addEventListener('click', showLibrary); $('#change-exam').addEventListener('click', showLibrary);
 $('#close-library').addEventListener('click', () => $('#library-dialog').close());
 $('#exam-search').addEventListener('input', renderLibrary);
@@ -298,21 +304,34 @@ $('#previous').addEventListener('click', () => move(-1)); $('#next').addEventLis
 $('#shuffle').addEventListener('click', () => { const pool = state.filtered.filter(q => q.id !== state.current[state.exam]); navigateTo(pool[Math.floor(Math.random() * pool.length)]); });
 $('#map-previous').addEventListener('click', () => { if (state.mapPage > 0) { state.mapPage--; renderMap(); } });
 $('#map-next').addEventListener('click', () => { if ((state.mapPage + 1) * 30 < state.filtered.length) { state.mapPage++; renderMap(); } });
-for (const input of [$('#jump')]) input.addEventListener('keydown', event => { if (event.key === 'Enter') { const q = state.questions.find(q => q.number === Number(event.target.value)); if (q) { state.query = ''; state.filter = 'all'; $('#search').value = ''; state.filtered = [...state.questions]; navigateTo(q); event.target.value = ''; } } });
+$('#jump-form').addEventListener('submit', event => {
+  event.preventDefault();
+  const input = $('#jump');
+  const question = state.questions.find(q => q.number === Number(input.value));
+  if (!question) return;
+  state.query = ''; state.filter = 'all'; $('#search').value = ''; state.filtered = [...state.questions];
+  navigateTo(question); input.value = '';
+});
+$('#load-retry').addEventListener('click', () => {
+  if (manifest && state.exam) loadExam(state.exam);
+  else init().catch(showLoadError);
+});
 document.addEventListener('keydown', event => { if ($('#library-dialog').open || $('#progress-dialog').open || /INPUT|TEXTAREA|SELECT|BUTTON/.test(event.target.tagName) || event.ctrlKey || event.metaKey || event.altKey) return; if (event.key === 'ArrowRight') { event.preventDefault(); move(1); } if (event.key === 'ArrowLeft') { event.preventDefault(); move(-1); } });
 async function init() {
   const response = await fetch('data/manifest.json', { cache: 'no-cache' });
-  if (!response.ok) throw new Error('No se encuentra el banco de preguntas. Ejecuta python3 scripts/build_study.py.');
+  if (!response.ok) throw new Error('No se pudo abrir la biblioteca.');
   manifest = await response.json();
   if (!['en', 'es', 'both'].includes(state.language)) state.language = 'es';
   $('#exam-count').textContent = manifest.exams.length;
-  const recommended = $('#recommended');
+  $('#library-button').disabled = false; $('#change-exam').disabled = false; document.querySelectorAll('[data-library-trigger]').forEach(button => { button.disabled = false; });
+  const recommended = $('#recommended'); recommended.replaceChildren();
   manifest.exams.slice(0, 3).forEach((exam, index) => {
     const button = element('button', 'recommended-exam'); button.dataset.exam = exam.id;
-    button.append(element('span', 'exam-symbol', ['☁', '◇', '⬡'][index]));
+    button.append(element('span', 'exam-symbol', exam.code.split('-')[0]));
     const info = element('span'); info.append(element('strong', '', exam.name), element('small', '', exam.code)); button.append(info);
     button.addEventListener('click', () => loadExam(exam.id)); recommended.append(button);
   });
   await loadExam(manifest.exams.some(e => e.id === state.exam) ? state.exam : manifest.exams[0].id);
 }
-init().catch(error => { $('#loading').textContent = error.message; $('#question-card').setAttribute('aria-busy', 'false'); });
+function showLoadError() { $('#loading').textContent = 'No se pudo cargar la biblioteca. Comprueba tu conexión y vuelve a intentarlo.'; $('#load-retry').hidden = false; $('#question-card').setAttribute('aria-busy', 'false'); }
+init().catch(showLoadError);
