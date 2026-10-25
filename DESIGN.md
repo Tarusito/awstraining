@@ -57,3 +57,13 @@ Revisión de las dos páginas con Web Interface Guidelines, axe-core 4.14.0 y re
 Pares principales de texto sobre fondos: mínimo 4,88:1 en modo claro y 5,48:1 en oscuro. Pruebas de reflujo a 320, 375, 430, 768, 1024 y 1440 px, sin desbordamiento horizontal. Comprobados selección por teclado, conservación del foco, modales, filtros vacíos, mapa, idiomas, debates y recuperación de fallos HTTP 503 simulados en un servidor local de prueba.
 
 Las imágenes de preguntas siguen utilizando las fuentes originales y su alternativa de enlace si no se pueden cargar. No se modifican enunciados, respuestas o traducciones.
+
+## Identificación visual de servicios
+
+Las 333 fichas incorporan una imagen vectorial de 48 × 48 px junto al título, con los colores originales de [AWS Architecture Icons](https://aws.amazon.com/architecture/icons/), paquete del 31 de julio de 2026. 253 fichas usan icono de servicio, 6 de función, 47 de servicio relacionado y 27 de categoría. La referencia exacta se indica al pasar el puntero sobre el icono; el pie explica las alternativas.
+
+El nombre visible identifica el servicio también para lectores de pantalla; los SVG son decorativos, sin foco y con espacio reservado. Un sprite local comparte 275 recursos, sin peticiones a terceros, imágenes rasterizadas ni dependencias nuevas. Los iconos con fondo transparente conservan un soporte blanco para funcionar en ambos temas.
+
+`scripts/aws_icon_map.json` registra la correspondencia y el SHA-256 del paquete oficial. Se regeneran los dos recursos con `python3 scripts/build_service_icons.py`, o con `--archive ruta/al/paquete.zip`. No hace falta descargar el paquete durante el despliegue.
+
+Verificados iconos de servicio, función y categoría, búsqueda y guardados, modos claro/oscuro y reflujo a 320, 375, 430, 768, 1024 y 1440 px. Sin desbordamiento horizontal ni errores de consola en las vistas revisadas.
