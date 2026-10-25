@@ -1,4 +1,4 @@
-import {serviceIcons} from './service-icons.mjs?v=20261025-service-icons-1';
+import {serviceIcons} from './service-icons.mjs?v=20261025-service-icons-2';
 
 const $ = selector => document.querySelector(selector);
 const normalize = text => String(text).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
@@ -140,7 +140,7 @@ function render() {
       svg.setAttribute('width', '48'); svg.setAttribute('height', '48');
       svg.setAttribute('aria-hidden', 'true'); svg.setAttribute('focusable', 'false');
       const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-      use.setAttribute('href', `service-icons.svg?v=20261025-service-icons-1#${icon.symbol}`);
+      use.setAttribute('href', `service-icons.svg?v=20261025-service-icons-2#${icon.symbol}`);
       svg.append(use); visual.append(svg); heading.append(visual);
     }
     const title = node('h2','',entry.name);heading.append(title);card.append(heading);
