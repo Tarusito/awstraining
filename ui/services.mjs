@@ -1,3 +1,5 @@
+import {serviceIcons} from './service-icons.mjs?v=20261025-service-icons-1';
+
 const $ = selector => document.querySelector(selector);
 const normalize = text => String(text).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 const node = (tag, className, text) => { const el = document.createElement(tag); if (className) el.className = className; if (text != null) el.textContent = text; return el; };
@@ -129,7 +131,19 @@ function render() {
     const bookmark = node('button','service-bookmark',saved.has(entry.id)?'★':'☆'); bookmark.setAttribute('aria-label',`${saved.has(entry.id)?'Quitar de guardados':'Guardar'} ${entry.name}`); bookmark.setAttribute('aria-pressed',String(saved.has(entry.id)));
     bookmark.addEventListener('click',()=>{ if(saved.has(entry.id))saved.delete(entry.id);else saved.add(entry.id); try{localStorage.setItem('nube.services.saved.v1',JSON.stringify([...saved]));}catch{$('#storage-notice').hidden=false;} render(); const next = document.querySelector(`[data-service="${entry.id}"] .service-bookmark`); (next || $('#service-search')).focus({preventScroll:true}); });
     top.append(category,bookmark);card.append(top);
-    const title = node('h2','',entry.name);card.append(title);
+    const heading = node('div','service-card-heading');
+    const icon = serviceIcons[entry.id];
+    if (icon) {
+      const visual = node('span', 'service-icon');
+      visual.title = `${({service:'Icono de AWS',feature:'Icono de función AWS',parent:'Icono del servicio relacionado',category:'Icono de categoría'})[icon.scope]}: ${icon.label}`;
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('width', '48'); svg.setAttribute('height', '48');
+      svg.setAttribute('aria-hidden', 'true'); svg.setAttribute('focusable', 'false');
+      const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+      use.setAttribute('href', `service-icons.svg?v=20261025-service-icons-1#${icon.symbol}`);
+      svg.append(use); visual.append(svg); heading.append(visual);
+    }
+    const title = node('h2','',entry.name);heading.append(title);card.append(heading);
     const labels=node('div','service-labels');
     if(entry.essential) labels.append(node('span','essential-label','✦ Clave para repasar'));
     if(entry.kind!=='service') labels.append(node('span','kind-label',({feature:'Función',tool:'Herramienta',infrastructure:'Infraestructura'})[entry.kind] || 'Producto'));
