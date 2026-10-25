@@ -3,13 +3,22 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description" content="Catálogo de servicios AWS en español: definiciones breves, características principales y documentación oficial.">
-  <meta name="theme-color" content="#f7f8fa"><title>Servicios AWS — Nube</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='14' fill='%231e6257'/%3E%3Cpath d='M13 30h23a7 7 0 0 0-6-12 10 10 0 0 0-19 4 4 4 0 0 0 2 8' fill='white'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="styles.css?v=20261025-mobile"><link rel="stylesheet" href="services.css?v=20261025-mobile">
-  <script src="services.mjs?v=20261025-mobile" type="module"></script>
+  <meta name="theme-color" content="#232f3e"><title>Servicios AWS — Nube</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='14' fill='%23232f3e'/%3E%3Cpath d='M13 30h23a7 7 0 0 0-6-12 10 10 0 0 0-19 4 4 4 0 0 0 2 8' fill='white'/%3E%3C/svg%3E">
+  <script src="theme.mjs?v=20261025-console-4"></script>
+  <link rel="preload" href="fonts/DM-Sans.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="styles.css?v=20261025-console-4"><link rel="stylesheet" href="services.css?v=20261025-console-4">
+  <script src="services.mjs?v=20261025-console-4" type="module"></script>
 </head>
 <body class="services-page">
   <a class="skip-link" href="#service-search">Saltar al buscador de servicios</a>
+  <header class="global-header">
+    <a class="global-brand" href="index.html" aria-label="Nube, inicio" translate="no"><svg viewBox="0 0 32 28" aria-hidden="true"><path d="M8 21h17a5 5 0 0 0 .4-10 8 8 0 0 0-15-2A6 6 0 0 0 8 21Z"/><path class="brand-accent" d="M11 26h13"/></svg><span>nube<span class="brand-period">.</span></span></a>
+    <span class="product-name">AWS Study Workspace</span>
+    <nav class="global-links" aria-label="Secciones de Nube"><a href="index.html">Preguntas</a><a href="services.html" aria-current="page">Servicios AWS</a></nav>
+    <div class="global-actions"><span class="mobile-section-name">Servicios AWS</span><button class="theme-toggle" data-theme-toggle aria-label="Activar modo oscuro" title="Activar modo oscuro"><svg class="theme-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14a8 8 0 0 1-10-10 8 8 0 1 0 10 10Z"/></svg><svg class="theme-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1 1m12 12 1 1M5 19l1-1M18 6l1-1"/></svg><span data-theme-label>Claro</span></button></div>
+  </header>
+  <div id="storage-notice" class="app-notice" role="status" hidden>No se pudo guardar el cambio en este navegador. Comprueba que el almacenamiento esté permitido.</div>
   <div class="app-shell">
     <aside class="sidebar">
       <a class="brand" href="index.html" aria-label="Nube, preguntas"><span class="brand-icon" aria-hidden="true">☁</span>nube<span class="brand-dot">.</span></a>
@@ -22,12 +31,12 @@
     <main>
       <header class="topbar"><div class="breadcrumb"><a href="index.html">Biblioteca</a><span>/</span><strong>Servicios AWS</strong></div><a class="catalog-official" href="https://aws.amazon.com/products/" target="_blank" rel="noopener noreferrer">Directorio oficial AWS ↗</a></header>
       <section class="workspace catalog-workspace">
-        <div class="catalog-heading"><div><div class="eyebrow"><span class="aws-label">AWS</span><span>TU GUÍA DE CONSULTA</span></div><h1>AWS, de un vistazo<span>.</span></h1><p>Qué hace cada servicio. Qué conviene recordar. <br>Todo a mano, mientras preparas tu certificación.</p></div><div class="catalog-heading-mark" aria-hidden="true">◇<span>EXPLORA · CONECTA · RECUERDA</span></div></div>
-        <div class="catalog-meta"><span><strong id="catalog-total">—</strong> fichas</span><i></i><span><strong id="category-total">—</strong> categorías</span><i></i><span>Definiciones en español</span><span class="snapshot-date" id="snapshot-date"></span></div>
-        <details class="certification-groups" id="certification-groups" open><summary class="certification-toggle"><span>Tu ruta de estudio<small id="certification-current">Todo el catálogo</small></span><span class="certification-toggle-icon" aria-hidden="true">⌄</span></summary><div class="certification-body">
+        <div class="catalog-heading"><div><div class="eyebrow"><span class="aws-label">AWS</span><span>REFERENCIA DE ESTUDIO</span></div><h1>Explorador de servicios AWS</h1><p>Consulta qué hace cada servicio, sus características y su alcance por certificación.</p></div></div>
+        <div class="catalog-meta"><span><strong id="catalog-total">—</strong> fichas</span><i></i><span><strong id="category-total">—</strong> categorías</span><i></i><span>En español</span><span class="snapshot-date" id="snapshot-date"></span></div>
+        <details class="certification-groups" id="certification-groups"><summary class="certification-toggle"><span>Filtrar por certificación<small id="certification-current">Todo el catálogo</small></span><span class="certification-toggle-icon" aria-hidden="true">⌄</span></summary><div class="certification-body">
           <div class="certification-section-heading"><h2 id="certification-section-title">POR CERTIFICACIÓN</h2><button id="certification-all" class="text-button" hidden>Quitar certificación</button></div>
           <div id="priority-certifications" class="priority-certifications" role="group" aria-label="Tus certificaciones prioritarias"></div>
-          <label class="certification-select"><span>El resto de certificaciones</span><select id="certification-select" aria-label="Agrupar servicios por certificación" disabled><option value="">Cargando certificaciones…</option></select></label>
+          <label class="certification-select"><span>Todas las certificaciones</span><select id="certification-select" aria-label="Agrupar servicios por certificación" disabled><option value="">Cargando certificaciones…</option></select></label>
           <div id="certification-summary" class="certification-summary" hidden>
             <div class="certification-summary-heading"><h3 id="certification-name"></h3><a id="certification-guide" target="_blank" rel="noopener noreferrer">Guía oficial AWS ↗</a></div>
             <p id="certification-description"></p>
@@ -35,12 +44,12 @@
           </div>
           <p id="certifications-error" class="certifications-error" role="status" hidden>No se pudieron cargar las agrupaciones. Puedes seguir consultando el catálogo y recargar para intentarlo de nuevo.</p>
         </div></details>
-        <div class="catalog-toolbar"><label class="search-box"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg><input id="service-search" type="search" placeholder="Busca S3, contenedores, bases de datos…" aria-label="Buscar servicios AWS"></label><label class="category-select"><span class="sr-only">Filtrar por categoría</span><select id="category-select"><option value="">Todas las categorías</option></select></label></div>
+        <div class="catalog-toolbar"><label class="search-box"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg><input id="service-search" name="service-search" type="search" autocomplete="off" placeholder="Busca S3, contenedores, bases de datos…" aria-label="Buscar servicios AWS"></label><label class="category-select"><span class="sr-only">Filtrar por categoría</span><select id="category-select"><option value="">Todas las categorías</option></select></label></div>
         <div class="catalog-filters"><div class="catalog-chips"><button id="filter-all" class="catalog-chip active" aria-pressed="true">Todos</button><button id="filter-essential" class="catalog-chip" aria-pressed="false">✦ Esenciales para estudiar</button><button id="filter-saved" class="catalog-chip" aria-pressed="false">☆ Guardados <span id="saved-count">0</span></button></div><label class="sort-select">Ordenar por <select id="service-sort" aria-label="Ordenar servicios"><option value="relevance">Relevancia</option><option value="name">Nombre A–Z</option></select></label></div>
         <div class="catalog-results-heading"><span id="service-result-count" role="status" aria-live="polite">Preparando el catálogo…</span><button id="clear-service-filters" class="text-button" hidden>Limpiar filtros</button></div>
-        <div id="catalog-error" class="catalog-empty" hidden><h2>No se pudo abrir el catálogo</h2><p>Recarga la página para volver a intentarlo.</p></div>
+        <div id="catalog-error" class="catalog-empty" hidden><h2>No se pudo abrir el catálogo</h2><p>No se pudieron cargar los servicios. Comprueba tu conexión y vuelve a intentarlo.</p><button id="reload-catalog" class="button secondary">Reintentar carga</button></div>
         <div id="catalog-empty" class="catalog-empty" hidden><span aria-hidden="true">⌕</span><h2>Ningún servicio coincide</h2><p>Prueba con otro nombre o categoría. Puedes buscar en inglés o en español.</p><button id="empty-clear" class="button secondary">Ver todo el catálogo</button></div>
-        <div id="service-grid" class="service-grid" aria-label="Fichas de servicios AWS"></div>
+        <section id="service-grid" class="service-grid" aria-busy="true" aria-label="Fichas de servicios AWS"></section>
         <nav id="catalog-pagination" class="catalog-pagination" aria-label="Páginas del catálogo"><button id="services-previous" class="button secondary">← Anterior</button><span id="services-page-number"></span><button id="services-next" class="button secondary">Siguiente →</button></nav>
         <footer class="catalog-note"><span aria-hidden="true">ⓘ</span><div><p>Incluye los servicios, funciones, herramientas e infraestructura identificados en el directorio de productos y el índice de documentación de AWS, agrupando nombres duplicados. Las fichas son un resumen de estudio; cada una enlaza a su fuente.</p><p>Los avisos de mantenimiento o retirada se indican cuando constan en la documentación oficial. La disponibilidad y las características pueden cambiar; consulta la fuente para conocer los detalles actuales.</p></div></footer>
       </section>
