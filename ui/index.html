@@ -3,25 +3,34 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#f7f8fa">
+  <meta name="theme-color" content="#232f3e">
   <meta name="description" content="Tu biblioteca local para estudiar certificaciones AWS. Preguntas en inglés y español, práctica y progreso personal.">
   <title>Nube — Tu espacio de estudio AWS</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='14' fill='%231e6257'/%3E%3Cpath d='M13 30h23a7 7 0 0 0-6-12 10 10 0 0 0-19 4 4 4 0 0 0 2 8' fill='white'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="styles.css?v=20261025-mobile">
-  <script src="app.mjs?v=20261025-mobile" type="module"></script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='14' fill='%23232f3e'/%3E%3Cpath d='M13 30h23a7 7 0 0 0-6-12 10 10 0 0 0-19 4 4 4 0 0 0 2 8' fill='white'/%3E%3C/svg%3E">
+  <script src="theme.mjs?v=20261025-console-4"></script>
+  <link rel="preload" href="fonts/DM-Sans.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="styles.css?v=20261025-console-4">
+  <script src="app.mjs?v=20261025-console-4" type="module"></script>
 </head>
 <body class="study-page">
   <a class="skip-link" href="#question-card">Saltar a la pregunta</a>
+  <header class="global-header">
+    <a class="global-brand" href="index.html" aria-label="Nube, inicio" translate="no"><svg viewBox="0 0 32 28" aria-hidden="true"><path d="M8 21h17a5 5 0 0 0 .4-10 8 8 0 0 0-15-2A6 6 0 0 0 8 21Z"/><path class="brand-accent" d="M11 26h13"/></svg><span>nube<span class="brand-period">.</span></span></a>
+    <span class="product-name">AWS Study Workspace</span>
+    <nav class="global-links" aria-label="Secciones de Nube"><a href="index.html" aria-current="page">Preguntas</a><a href="services.html">Servicios AWS</a></nav>
+    <div class="global-actions"><button class="header-certifications" data-library-trigger aria-haspopup="dialog" disabled>Certificaciones <span aria-hidden="true">⌄</span></button><button class="theme-toggle" data-theme-toggle aria-label="Activar modo oscuro" title="Activar modo oscuro"><svg class="theme-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14a8 8 0 0 1-10-10 8 8 0 1 0 10 10Z"/></svg><svg class="theme-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1 1m12 12 1 1M5 19l1-1M18 6l1-1"/></svg><span data-theme-label>Claro</span></button></div>
+  </header>
+  <div id="storage-notice" class="app-notice" role="status" hidden>No se pudo guardar el cambio en este navegador. Comprueba que el almacenamiento esté permitido.</div>
   <div class="app-shell">
     <aside class="sidebar">
       <a class="brand" href="./" aria-label="Nube, inicio"><span class="brand-icon" aria-hidden="true">☁</span>nube<span class="brand-dot">.</span></a>
       <span class="brand-caption">UN POCO CADA DÍA, MÁS CERCA.</span>
-      <div class="sidebar-heading">TU BIBLIOTECA <span id="exam-count">23</span></div>
-      <div class="sidebar-navigation"><button id="library-button" class="library-button"><span class="tiny-grid" aria-hidden="true">▦</span><span class="desktop-library-label">Todas las certificaciones</span><span class="mobile-library-label">Certificaciones</span><span aria-hidden="true">↗</span></button><a href="services.html" class="library-button services-link"><span class="tiny-grid" aria-hidden="true">◇</span> Servicios AWS <span aria-hidden="true">↗</span></a></div>
-      <div class="sidebar-heading recommended-label">PARA TI</div>
+      <div class="sidebar-heading">ESPACIO DE ESTUDIO <span id="exam-count">23</span></div>
+      <div class="sidebar-navigation"><button id="library-button" class="library-button" disabled><span class="tiny-grid" aria-hidden="true">▦</span><span class="desktop-library-label">Todas las certificaciones</span><span class="mobile-library-label">Certificaciones</span><span aria-hidden="true">↗</span></button><a href="services.html" class="library-button services-link"><span class="tiny-grid" aria-hidden="true">◇</span> Servicios AWS <span aria-hidden="true">↗</span></a></div>
+      <div class="sidebar-heading recommended-label">CERTIFICACIONES</div>
       <nav id="recommended" aria-label="Certificaciones destacadas"></nav>
       <div class="sidebar-divider"></div>
-      <div class="sidebar-heading">ORGANIZA TU ESTUDIO</div>
+      <div class="sidebar-heading">TUS PREGUNTAS</div>
       <button class="side-link active" data-filter="all"><span aria-hidden="true">▤</span> Todas las preguntas <span id="all-count"></span></button>
       <button class="side-link" data-filter="bookmarked"><span aria-hidden="true">☆</span> Marcadas <span id="bookmarked-count">0</span></button>
       <button class="side-link" data-filter="incorrect"><span aria-hidden="true">↻</span> Para repasar <span id="incorrect-count">0</span></button>
@@ -29,23 +38,23 @@
     </aside>
 
     <main>
-      <header class="topbar"><div class="breadcrumb">Biblioteca <span>/</span> <strong id="breadcrumb-name">Cloud Practitioner</strong></div><span class="topbar-label">APRENDER ES UN PROCESO <span aria-hidden="true">✳</span></span></header>
+      <header class="topbar"><div class="breadcrumb">Biblioteca <span>/</span> <strong id="breadcrumb-name">Cloud Practitioner</strong></div><span class="topbar-label">Preparación para certificaciones AWS</span></header>
       <section class="workspace">
-        <div class="page-heading"><div><div class="eyebrow"><span class="aws-label">AWS</span><span id="exam-code">CLF-C02</span><span class="eyebrow-dot">·</span><span>PRÁCTICA A TU RITMO</span></div><h1 id="exam-name">Cloud Practitioner</h1><p>Haz espacio para lo que viene. Una pregunta a la vez.</p></div><button id="change-exam" class="button secondary change-exam">Cambiar certificación <span aria-hidden="true">⌄</span></button></div>
+        <div class="page-heading"><div><div class="eyebrow"><span class="aws-label">AWS</span><span id="exam-code">CLF-C02</span><span class="eyebrow-dot">·</span><span>BANCO DE PREGUNTAS</span></div><h1 id="exam-name">Cloud Practitioner</h1><p>Practica, contrasta las respuestas y sigue tu progreso.</p></div><button id="change-exam" class="button secondary change-exam" disabled>Cambiar certificación <span aria-hidden="true">⌄</span></button></div>
 
         <div class="study-toolbar">
-          <label class="search-box"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg><input id="search" type="search" placeholder="Busca un servicio, concepto o pregunta…" aria-label="Buscar preguntas"></label>
+          <label class="search-box"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg><input id="search" name="search" type="search" autocomplete="off" placeholder="Buscar por servicio o concepto…" aria-label="Buscar preguntas"></label>
           <div class="language-switch" role="group" aria-label="Idioma de las preguntas"><button data-language="en">EN <span>English</span></button><button data-language="es" class="active">ES <span>Español</span></button><button data-language="both" aria-label="Ver ambos idiomas">EN + ES</button></div>
         </div>
 
-        <div class="mobile-tools"><div class="mobile-filters" role="group" aria-label="Filtrar preguntas"><button class="active" data-filter="all">Todas</button><button data-filter="bookmarked">☆ Marcadas</button><button data-filter="incorrect">↻ Repasar</button></div><button id="study-overview" class="overview-button" aria-haspopup="dialog" aria-controls="progress-dialog"><span aria-hidden="true">▦</span> Mi progreso</button><span id="mobile-progress"></span></div>
+        <div class="mobile-tools"><div class="mobile-filters" role="group" aria-label="Filtrar preguntas"><button class="active" data-filter="all">Todas</button><button data-filter="bookmarked">☆ Marcadas</button><button data-filter="incorrect">↻ Repasar</button></div><button id="study-overview" class="overview-button" aria-haspopup="dialog"><span aria-hidden="true">▦</span> Mi progreso</button><span id="mobile-progress"></span></div>
 
         <div class="study-layout">
           <div class="question-column">
-            <div class="question-toolbar"><div><span class="live-dot"></span><span id="result-count">Cargando biblioteca…</span></div><button id="shuffle" class="text-button"><span aria-hidden="true">⤨</span> Aleatoria</button></div>
+            <div class="question-toolbar"><div><span class="live-dot"></span><span id="result-count" role="status" aria-live="polite">Cargando biblioteca…</span></div><button id="shuffle" class="text-button"><span aria-hidden="true">⤨</span> Aleatoria</button></div>
             <article id="question-card" tabindex="-1" class="question-card" aria-busy="true">
-              <div class="question-meta"><div><span class="pill">MODO PRÁCTICA</span><span id="question-number" class="question-number"></span></div><button id="bookmark" class="bookmark-button" aria-label="Marcar pregunta" aria-pressed="false">☆</button></div>
-              <div id="loading" class="loading">Preparando tu espacio de estudio…</div>
+              <div class="question-meta"><div><span class="pill">PRÁCTICA</span><span id="question-number" class="question-number"></span></div><button id="bookmark" class="bookmark-button" aria-label="Marcar pregunta" aria-pressed="false">☆</button></div>
+              <div id="loading" class="loading" role="status" aria-live="polite">Cargando preguntas…</div><button id="load-retry" class="button secondary load-retry" hidden>Reintentar carga</button>
               <div id="question-content" hidden>
                 <div id="translation-notice" class="translation-notice" hidden></div>
                 <button id="translation-retry" class="text-button" hidden>Reintentar traducción</button>
@@ -69,8 +78,8 @@
           </div>
 
           <aside class="study-aside" aria-label="Progreso de estudio">
-            <section class="progress-card"><div class="card-eyebrow">POCO A POCO</div><h2>Tu recorrido</h2><div class="progress-total"><strong id="answered-count">0</strong><span id="progress-denominator">/ 718 practicadas</span></div><div class="progress-track"><div id="progress-fill"></div></div><div class="progress-stats"><div><span class="stat-dot green"></span>Acertadas <strong id="correct-count">0</strong></div><div><span class="stat-dot amber"></span>Para repasar <strong id="review-count">0</strong></div></div><p class="encouragement" id="encouragement">No hace falta saberlo todo.<br>Solo empezar por una.</p></section>
-            <section class="question-map"><div class="map-heading"><h2>Explora las preguntas</h2><span id="map-range"></span></div><div id="question-grid" class="question-grid"></div><div class="map-controls"><button id="map-previous" class="text-button" aria-label="Bloque anterior de preguntas">←</button><label>Ir a la pregunta<input id="jump" type="number" inputmode="numeric" min="1" placeholder="N.º" aria-label="Ir al número de pregunta"></label><button id="map-next" class="text-button" aria-label="Bloque siguiente de preguntas">→</button></div><div class="map-legend"><span><i class="current"></i>Actual</span><span><i class="done"></i>Practicada</span></div></section>
+            <section class="progress-card"><div class="card-eyebrow">RESUMEN DE ESTUDIO</div><h2>Tu progreso</h2><div class="progress-total"><strong id="answered-count">0</strong><span id="progress-denominator">/ 718 practicadas</span></div><div id="study-progress" class="progress-track" role="progressbar" aria-label="Preguntas practicadas" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="progress-fill"></div></div><div class="progress-stats"><div><span class="stat-dot green"></span>Acertadas <strong id="correct-count">0</strong></div><div><span class="stat-dot amber"></span>Para repasar <strong id="review-count">0</strong></div></div><p class="encouragement" id="encouragement">Tu siguiente respuesta es una oportunidad para aprender.</p></section>
+            <section class="question-map"><div class="map-heading"><h2>Explora las preguntas</h2><span id="map-range"></span></div><div id="question-grid" class="question-grid"></div><div class="map-controls"><button id="map-previous" class="text-button" aria-label="Bloque anterior de preguntas">←</button><form id="jump-form"><label for="jump">Ir a pregunta</label><input id="jump" name="question-number" type="number" inputmode="numeric" min="1" placeholder="N.º" aria-label="Ir al número de pregunta" autocomplete="off" required><button type="submit" class="jump-submit">Ir</button></form><button id="map-next" class="text-button" aria-label="Bloque siguiente de preguntas">→</button></div><div class="map-legend"><span><i class="current"></i>Actual</span><span><i class="done"></i>Acertada ✓</span><span><i class="missed"></i>Repasar ↻</span></div></section>
             <div class="study-tip"><span aria-hidden="true">✦</span><div><strong>Un idioma, o los dos.</strong><p>Compara el enunciado en inglés y español con EN + ES. Los nombres técnicos se entienden mejor en contexto.</p></div></div>
           </aside>
         </div>
@@ -79,8 +88,8 @@
   </div>
 
   <nav class="mobile-navigation" aria-label="Navegación principal"><a href="index.html" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5zM8 8h8M8 12h8M8 16h5"/></svg><span>Preguntas</span></a><a href="services.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg><span>Servicios AWS</span></a></nav>
-  <dialog id="progress-dialog" class="progress-dialog" aria-labelledby="progress-dialog-title"><div class="dialog-heading"><div><span class="eyebrow">TU SESIÓN DE ESTUDIO</span><h2 id="progress-dialog-title">Un paso cada día</h2></div><button id="close-progress" class="icon-button" aria-label="Cerrar progreso">×</button></div><div id="mobile-study-panel"></div><p class="dialog-note">Tu progreso se guarda en este navegador.</p></dialog>
-  <dialog id="library-dialog" aria-labelledby="library-title"><div class="dialog-heading"><div><span class="eyebrow">TU PRÓXIMO PASO</span><h2 id="library-title">Elige una certificación</h2></div><button id="close-library" class="icon-button" aria-label="Cerrar biblioteca">×</button></div><label class="search-box dialog-search"><input id="exam-search" type="search" placeholder="Buscar por nombre o código…" aria-label="Buscar certificación"></label><div id="exam-list" class="exam-list"></div><p class="dialog-note">Las versiones sin código se muestran tal como aparecen en la caché. No se garantiza que correspondan a un examen vigente.</p></dialog>
+  <dialog id="progress-dialog" class="progress-dialog" aria-labelledby="progress-dialog-title"><div class="dialog-heading"><div><span class="eyebrow">TU SESIÓN DE ESTUDIO</span><h2 id="progress-dialog-title">Progreso y preguntas</h2></div><button id="close-progress" class="icon-button" aria-label="Cerrar progreso">×</button></div><div id="mobile-study-panel"></div><p class="dialog-note">Tu progreso se guarda en este navegador.</p></dialog>
+  <dialog id="library-dialog" aria-labelledby="library-title"><div class="dialog-heading"><div><span class="eyebrow">TU PRÓXIMO PASO</span><h2 id="library-title">Elige una certificación</h2></div><button id="close-library" class="icon-button" aria-label="Cerrar biblioteca">×</button></div><label class="search-box dialog-search"><input id="exam-search" name="exam-search" type="search" autocomplete="off" placeholder="Buscar por nombre o código…" aria-label="Buscar certificación"></label><div id="exam-list" class="exam-list" aria-live="polite"></div><p class="dialog-note">Las versiones sin código se muestran tal como aparecen en la caché. No se garantiza que correspondan a un examen vigente.</p></dialog>
   <noscript>Esta página necesita JavaScript para consultar las preguntas.</noscript>
 </body>
 </html>
