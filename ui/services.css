@@ -30,6 +30,10 @@
 .service-bookmark { width: 40px; height: 40px; flex: none; color: var(--text-muted); font-size: 25px; line-height: 1; border-radius: var(--radius-sm); }
 .service-bookmark:hover { background: var(--selected); color: var(--link); }
 .service-bookmark[aria-pressed='true'] { background: var(--warning-bg); color: var(--warning); }
+.service-card-heading { display: flex; align-items: center; gap: var(--space-3); }
+.service-card-heading h2 { min-width: 0; }
+.service-icon { display: flex; flex: 0 0 48px; width: 48px; height: 48px; overflow: hidden; border-radius: var(--radius-sm); background: #fff; }
+.service-icon svg { display: block; width: 48px; height: 48px; }
 .service-card h2 { font-size: 19px; font-weight: 700; line-height: 1.4; letter-spacing: -.3px; overflow-wrap: anywhere; }
 .service-labels { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: var(--space-3); }
 .service-labels:empty { display: none; }
