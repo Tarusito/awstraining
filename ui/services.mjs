@@ -8,7 +8,6 @@ let certifications = [];
 let saved = new Set();
 try { const stored = JSON.parse(localStorage.getItem('nube.services.saved.v1') || '[]'); if (Array.isArray(stored)) saved = new Set(stored); } catch { /* Bookmarks are optional. */ }
 const PAGE_SIZE = 24;
-const categoryColors = ['#216757','#5c7798','#8c6d9c','#b7894f','#5e8b86','#968453','#6582a5','#b17a80'];
 function updateUrl() {
   const params = new URLSearchParams();
   if (state.query) params.set('q', state.query);
@@ -123,14 +122,12 @@ function render() {
   for (const button of document.querySelectorAll('.category-link')) { button.classList.toggle('active',button.dataset.category===state.category); button.setAttribute('aria-pressed',String(button.dataset.category===state.category)); }
   $('#saved-count').textContent = certificationEntries().filter(entry => saved.has(entry.id)).length;
   const grid = $('#service-grid'); grid.replaceChildren();
-  const categories = [...new Set(catalog.entries.map(entry=>entry.category))].sort();
   for (const entry of entries.slice(start,start+PAGE_SIZE)) {
     const card = node('article','service-card'); card.dataset.service = entry.id;
-    card.style.setProperty('--card-color',categoryColors[categories.indexOf(entry.category)%categoryColors.length]);
     const top = node('div','service-card-top');
     const category = node('span','service-category',entry.category);
     const bookmark = node('button','service-bookmark',saved.has(entry.id)?'★':'☆'); bookmark.setAttribute('aria-label',`${saved.has(entry.id)?'Quitar de guardados':'Guardar'} ${entry.name}`); bookmark.setAttribute('aria-pressed',String(saved.has(entry.id)));
-    bookmark.addEventListener('click',()=>{ if(saved.has(entry.id))saved.delete(entry.id);else saved.add(entry.id); try{localStorage.setItem('nube.services.saved.v1',JSON.stringify([...saved]));}catch{} render(); });
+    bookmark.addEventListener('click',()=>{ if(saved.has(entry.id))saved.delete(entry.id);else saved.add(entry.id); try{localStorage.setItem('nube.services.saved.v1',JSON.stringify([...saved]));}catch{$('#storage-notice').hidden=false;} render(); const next = document.querySelector(`[data-service="${entry.id}"] .service-bookmark`); (next || $('#service-search')).focus({preventScroll:true}); });
     top.append(category,bookmark);card.append(top);
     const title = node('h2','',entry.name);card.append(title);
     const labels=node('div','service-labels');
@@ -150,6 +147,7 @@ function render() {
     if(entry.statusSource){const status=node('a','lifecycle-source','Ver aviso ↗');status.href=entry.statusSource;status.target='_blank';status.rel='noopener noreferrer';links.append(status);}
     card.append(links);grid.append(card);
   }
+  $('#service-grid').setAttribute('aria-busy', 'false');
   updateUrl();
 }
 if (matchMedia('(max-width: 760px)').matches) $('#certification-groups').open = false;
@@ -163,6 +161,7 @@ for(const mode of ['all','essential','saved']) $(`#filter-${mode}`).addEventList
 $('#clear-service-filters').addEventListener('click',clearFilters);$('#empty-clear').addEventListener('click',clearFilters);
 $('#services-previous').addEventListener('click',()=>{state.page--;render();$('#service-result-count').scrollIntoView({block:'start'});});
 $('#services-next').addEventListener('click',()=>{state.page++;render();$('#service-result-count').scrollIntoView({block:'start'});});
+$('#reload-catalog').addEventListener('click', () => location.reload());
 async function fetchJson(path) {
  const response = await fetch(path, {cache:'no-cache'});
  if (!response.ok) throw new Error('Content unavailable');
@@ -192,4 +191,4 @@ try{
  const date=new Date(`${catalog.updated}T12:00:00`);const label=new Intl.DateTimeFormat('es-ES',{day:'numeric',month:'short',year:'numeric'}).format(date);
  $('#snapshot-date').textContent=`Revisión: ${label}`;$('#snapshot-sidebar').textContent=`Revisado el ${label}`;
  renderCategories();render();
-}catch{ $('#catalog-error').hidden=false;$('#service-result-count').textContent='Catálogo no disponible';$('#catalog-pagination').hidden=true; }
+}catch{ $('#service-grid').setAttribute('aria-busy','false');$('#catalog-error').hidden=false;$('#service-result-count').textContent='Catálogo no disponible';$('#catalog-pagination').hidden=true; }
